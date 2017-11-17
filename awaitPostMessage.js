@@ -1,4 +1,4 @@
-function awaitPostMessage() {
+(function awaitPostMessage() {
   var isReactNativePostMessageReady = !!window.originalPostMessage;
   var queue = [];
   var currentPostMessageFn = function store(message) {
@@ -27,6 +27,9 @@ function awaitPostMessage() {
   function sendQueue() {
     while (queue.length > 0) window.postMessage(queue.shift());
   }
-}
+}());
 
-awaitPostMessage();
+function sendPostMessage(result) {
+  const target = window.self !== window.parent ? window.parent : window;
+  target.postMessage(JSON.stringify({ result: result }), '*');
+}
